@@ -1,4 +1,7 @@
 .container {
+  background: url("");
+  background-size: cover;
+  
   margin-top: 96px;
   display: flex;
   flex-direction: column;
@@ -7,6 +10,7 @@
   width: 100%;
   position: absolute;
   padding: 0 24px;
+  
 }
 
 .h1 {
@@ -45,7 +49,7 @@
 
 .nftBox {
   border-radius: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #ffffff;
   width: 19%;
   min-height: 200px;
   padding: 16px;
@@ -73,7 +77,7 @@
 }
 
 .selectBoxDescription {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(248, 248, 248, 0.9);
   margin-top: 0px;
 }
 
@@ -90,6 +94,9 @@
 @media only screen and (max-width: 800px) {
   .nftBoxGrid {
     justify-content: center;
+    overflow-y: auto;
+  max-height: 80vh; /* you can set this to your desired value */
+}
   }
   .nftBox {
     width: 90%;
@@ -99,7 +106,7 @@
     width: 90%;
     margin-top: 16px;
   }
-}
+
 
 .tokenGrid {
   display: flex;
@@ -178,3 +185,39 @@
   max-height: 300px;
   border-radius: 15px;
 }
+
+.walletButtonContainer {
+  position: absolute;
+  top: -50px;
+  right: 20px;
+  z-index: 1000;
+}
+.container {
+  /* ... */
+}
+
+.h1 {
+  /* ... */
+}
+
+/* ... (All other existing styles here) */
+
+.nftBox {
+  border-radius: 16px;
+  border: 1px solid #ffffff;
+  width: 30%;
+  min-height: 200px;
+  padding: 16px;
+  overflow: auto; /* New line */
+  justify-content: center;  /* Center items horizontally */
+  display: list-item;  /* Flexbox container */
+}
+
+.nftMedia {
+  width: 100%;
+  max-height: 200px;
+  object-fit: scale-down; /* or object-fit: contain; */
+  border-radius: 15px;
+}
+
+/* ... (Any other styles you have) */
