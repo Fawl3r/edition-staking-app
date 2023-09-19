@@ -71,6 +71,15 @@ const Stake: NextPage = () => {
     }
   
     loadTotalClaimableRewards();
+
+     // Set up polling every 5 seconds
+     const intervalId = setInterval(loadTotalClaimableRewards, 5000);
+
+     // Cleanup
+    return () => {
+      clearInterval(intervalId);
+    };
+
   
   }, [contract, address, ownedNfts]);
   
