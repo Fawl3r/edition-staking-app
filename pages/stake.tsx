@@ -19,7 +19,7 @@ import {
   tokenContractAddress,
 } from "../consts/contractAddresses";
 import styles from "../styles/Home.module.css";
-import { FixedSizeGrid as Grid } from 'react-window';
+import { FixedSizeList as List } from 'react-window';
 
 
 const Stake: NextPage = () => {
@@ -28,6 +28,7 @@ const Stake: NextPage = () => {
     editionDropContractAddress,
     "edition-drop"
   );
+  
   const { contract: tokenContract } = useContract(
     tokenContractAddress,
     "token"
@@ -43,6 +44,7 @@ const Stake: NextPage = () => {
   
   const nftGridRef = useRef(null);
   const [page, setPage] = useState(1); // Initialize page number
+  
   
 
   useEffect(() => {
