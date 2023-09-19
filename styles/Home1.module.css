@@ -86,6 +86,7 @@
   .nftBox {
     width: 49%;
     margin-top: 16px;
+    
   }
 }
 
@@ -103,13 +104,14 @@
     margin-top: 16px;
   }
   .optionSelectBox {
+    position: relative;
     width: 25%;
     margin-top: 16px;
-    position: absolute;
-    left: 715px; /* move it 20px to the right */
-    position: absolute;
-    top: 630px;
-    position: absolute;
+    position: relative;
+    left: 0px; /* move it 20px to the right */
+    position: relative;
+    top: 500px;
+    position: relative;
   bottom: 0px;
   }
 
