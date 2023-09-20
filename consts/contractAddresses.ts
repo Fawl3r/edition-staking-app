@@ -4,4 +4,4 @@ export const tokenContractAddress =
   "0x7175F2C267cEfB8cb57Ef1aE8711bD84B11e61E3";
 export const stakingContractAddress =
   "0x6200DC292Daa2E6A3fF3d5523C9b0B252Cd2Cc71";
-  export const stakingContractAddress2 = "0x8B3Da72FE5879C7DCBF39cF75589af84Fe450978"; // Added
+ 
