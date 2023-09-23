@@ -11,7 +11,7 @@ import {
 } from "@thirdweb-dev/react";
 import { BigNumber, ethers } from "ethers";
 import type { NextPage } from "next";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import NFTCard from "../components/NFTCard";
 import {
   editionDropContractAddress,
@@ -19,8 +19,6 @@ import {
   tokenContractAddress,
 } from "../consts/contractAddresses";
 import styles from "../styles/Home.module.css";
-import { FixedSizeList as List } from 'react-window';
-
 
 const Stake: NextPage = () => {
   const address = useAddress();
@@ -28,7 +26,6 @@ const Stake: NextPage = () => {
     editionDropContractAddress,
     "edition-drop"
   );
-  
   const { contract: tokenContract } = useContract(
     tokenContractAddress,
     "token"
@@ -41,48 +38,19 @@ const Stake: NextPage = () => {
     address,
   ]);
 
-  
-  const nftGridRef = useRef(null);
-  const [page, setPage] = useState(1); // Initialize page number
-  
-  
-
   useEffect(() => {
-    if (!contract || !address || !ownedNfts) return;
-  
-    async function loadTotalClaimableRewards() {
-      try {
-        let totalClaimable = BigNumber.from(0);
-  
-        for (const nft of ownedNfts) {
-          const tokenId = nft.metadata.id;  // Assuming `id` contains the tokenId
-          const stakeInfo = await contract?.call("getStakeInfoForToken", [tokenId, address]);
-          
-          if (stakeInfo && stakeInfo[1]) {
-            totalClaimable = totalClaimable.add(stakeInfo[1]);
-          }
-        }
-  
-        setClaimableRewards(totalClaimable);
-  
-      } catch (error) {
-        console.error("An error occurred while fetching claimable rewards:", error);
-      }
+    if (!contract || !address) return;
+
+    async function loadClaimableRewards() {
+      const stakeInfo = await contract?.call("getStakeInfoForToken", [
+        0,
+        address,
+      ]);
+      setClaimableRewards(stakeInfo[1]);
     }
-  
-    loadTotalClaimableRewards();
 
-     // Set up polling every 5 seconds
-     const intervalId = setInterval(loadTotalClaimableRewards, 5000);
-
-     // Cleanup
-    return () => {
-      clearInterval(intervalId);
-    };
-
-  
-  }, [contract, address, ownedNfts]);
-  
+    loadClaimableRewards();
+  }, [address, contract]);
 
   async function stakeNft(id: string) {
     if (!address) return;
@@ -103,9 +71,8 @@ const Stake: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.connectWalletButton}>
-        <ConnectWallet />
-      </div>
+      <h1 className={styles.h1}>Stake Your NFTs</h1>
+      <hr className={`${styles.divider} ${styles.spacerTop}`} />
 
       {!address ? (
         <ConnectWallet />
@@ -116,17 +83,17 @@ const Stake: NextPage = () => {
             <div className={styles.tokenItem}>
               <h3 className={styles.tokenLabel}>Claimable Rewards</h3>
               <p className={styles.tokenValue}>
-  <b>
-    {!claimableRewards
-      ? "Loading..."
-      : Number(ethers.utils.formatUnits(claimableRewards, 18)).toFixed(2)}
-  </b> {tokenBalance?.symbol} Token
-</p>
+                <b>
+                  {!claimableRewards
+                    ? "No rewards"
+                    : Number(ethers.utils.formatUnits(claimableRewards, 18)).toFixed(2)}  </b>{""}
+                {tokenBalance?.symbol}
+              </p>
             </div>
             <div className={styles.tokenItem}>
               <h3 className={styles.tokenLabel}>Current Balance</h3>
               <p className={styles.tokenValue}>
-  <b>{Number(tokenBalance?.displayValue).toFixed(2)}</b> {tokenBalance?.symbol} Token
+                <b>{Number(tokenBalance?.displayValue).toFixed(2)}</b> {tokenBalance?.symbol}
               </p>
             </div>
           </div>
@@ -141,7 +108,7 @@ const Stake: NextPage = () => {
 
     // Iterate over each owned NFT
     for (const nft of ownedNfts) {
-      const tokenId = nft.metadata.id;  // Assuming the ID is stored in metadata
+      const tokenId = ownedNfts;  // Assuming the ID is stored in metadata
       try {
         // Make the contract call to claim rewards for this particular token
         await contract.call("claimRewards", [tokenId]);
@@ -156,12 +123,8 @@ const Stake: NextPage = () => {
   Claim Rewards
 </Web3Button>
 
-
-
-
           <hr className={`${styles.divider} ${styles.spacerTop}`} />
           <h2>Your Staked NFTs</h2>
-          <div>Quantity: {stakedTokens ? stakedTokens[0]?.length : 'Loading...'}</div>
           <div className={styles.nftBoxGrid}>
             {stakedTokens &&
               stakedTokens[0]?.map((stakedToken: BigNumber) => (
@@ -174,7 +137,6 @@ const Stake: NextPage = () => {
 
           <hr className={`${styles.divider} ${styles.spacerTop}`} />
           <h2>Your Unstaked NFTs</h2>
-          <div>Quantity: {ownedNfts ? ownedNfts.length : 'Loading...'}</div>
           <div className={styles.nftBoxGrid}>
             {ownedNfts?.map((nft) => (
               <div className={styles.nftBox} key={nft.metadata.id.toString()}>
