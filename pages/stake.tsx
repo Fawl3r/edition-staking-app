@@ -38,19 +38,18 @@ const Stake: NextPage = () => {
     address,
   ]);
 
+  if (stakedTokens) {
+    console.log("staked tokens", stakedTokens[0].toString());
+  }
+
   useEffect(() => {
     if (!contract || !address) return;
 
-    async function loadClaimableRewards() {
-      const stakeInfo = await contract?.call("getStakeInfoForToken", [
-        0,
-        address,
-      ]);
-      setClaimableRewards(stakeInfo[1]);
+    if (stakedTokens) {
+      const rewards = stakedTokens._totalRewards.toNumber();
+      setClaimableRewards(rewards);
     }
-
-    loadClaimableRewards();
-  }, [address, contract]);
+  }, [address, contract, stakedTokens]);
 
   async function stakeNft(id: string) {
     if (!address) return;
@@ -72,8 +71,11 @@ const Stake: NextPage = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>Stake Your NFTs</h1>
-      <hr className={`${styles.divider} ${styles.spacerTop}`} />
 
+      <hr className={`${styles.divider} ${styles.spacerTop}`} />
+      <div className={styles.connectWalletButton}>
+        <ConnectWallet />
+      </div>
       {!address ? (
         <ConnectWallet />
       ) : (
@@ -82,46 +84,16 @@ const Stake: NextPage = () => {
           <div className={styles.tokenGrid}>
             <div className={styles.tokenItem}>
               <h3 className={styles.tokenLabel}>Claimable Rewards</h3>
-              <p className={styles.tokenValue}>
-                <b>
-                  {!claimableRewards
-                    ? "No rewards"
-                    : Number(ethers.utils.formatUnits(claimableRewards, 18)).toFixed(2)}  </b>{""}
-                {tokenBalance?.symbol}
-              </p>
+              <p className={styles.tokenValue}>{claimableRewards}</p>
             </div>
             <div className={styles.tokenItem}>
               <h3 className={styles.tokenLabel}>Current Balance</h3>
               <p className={styles.tokenValue}>
-                <b>{Number(tokenBalance?.displayValue).toFixed(2)}</b> {tokenBalance?.symbol}
+                <b>{Number(tokenBalance?.displayValue).toFixed(2)}</b>{" "}
+                {tokenBalance?.symbol}
               </p>
             </div>
           </div>
-
-          <Web3Button
-  action={async (contract) => {
-    // Make sure the user owns some NFTs
-    if (!ownedNfts || ownedNfts.length === 0) {
-      console.log("You don't own any NFTs to claim rewards for.");
-      return;
-    }
-
-    // Iterate over each owned NFT
-    for (const nft of ownedNfts) {
-      const tokenId = ownedNfts;  // Assuming the ID is stored in metadata
-      try {
-        // Make the contract call to claim rewards for this particular token
-        await contract.call("claimRewards", [tokenId]);
-        console.log(`Successfully claimed rewards for token ID: ${tokenId}`);
-      } catch (error) {
-        console.error(`Failed to claim rewards for token ID ${tokenId}`, error);
-      }
-    }
-  }}
-  contractAddress={stakingContractAddress}
->
-  Claim Rewards
-</Web3Button>
 
           <hr className={`${styles.divider} ${styles.spacerTop}`} />
           <h2>Your Staked NFTs</h2>
@@ -131,6 +103,7 @@ const Stake: NextPage = () => {
                 <NFTCard
                   tokenId={stakedToken.toNumber()}
                   key={stakedToken.toString()}
+                  address={address}
                 />
               ))}
           </div>
