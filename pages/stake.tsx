@@ -46,7 +46,7 @@ const Stake: NextPage = () => {
     if (!contract || !address) return;
 
     if (stakedTokens) {
-      const rewards = stakedTokens._totalRewards.toNumber();
+      const rewards = stakedTokens[0];
       setClaimableRewards(rewards);
     }
   }, [address, contract, stakedTokens]);
@@ -84,7 +84,9 @@ const Stake: NextPage = () => {
           <div className={styles.tokenGrid}>
             <div className={styles.tokenItem}>
               <h3 className={styles.tokenLabel}>Claimable Rewards</h3>
-              <p className={styles.tokenValue}>{claimableRewards}</p>
+              <p className={styles.tokenValue}>
+                <b>{claimableRewards ? claimableRewards.toString() : "Loading..."}</b> F3
+              </p>
             </div>
             <div className={styles.tokenItem}>
               <h3 className={styles.tokenLabel}>Current Balance</h3>

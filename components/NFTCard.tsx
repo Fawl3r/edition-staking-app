@@ -12,6 +12,7 @@ import {
   locktime,
 } from "../consts/contractAddresses";
 import styles from "../styles/Home.module.css";
+import { BigNumber } from "ethers"; // Import BigNumber from ethers
 
 interface NFTCardProps {
   tokenId: number;
@@ -49,30 +50,18 @@ const NFTCard: FC<NFTCardProps> = ({ tokenId, address }) => {
           </Web3Button>
           <br />
           <br />
-          {getstakeInfoOfToken &&
-          getstakeInfoOfToken[1].toNumber() != 0 &&
-          getstakeInfoOfToken[1].toNumber() * 3600 >= locktime ? (
+          {getstakeInfoOfToken && (
             <Web3Button
               action={(contract) =>
                 contract?.call("claimRewards", [nft.metadata.id])
               }
               contractAddress={stakingContractAddress}
             >
-              Claim Rewards
-            </Web3Button>
-          ) : (
-            <Web3Button
-              action={() =>
-                window.alert(
-                  `You can't claim rewards yet, please wait for ${
-                    locktime / 3600 - getstakeInfoOfToken[1].toNumber()
-                  } hours`
-                )
-              }
-              contractAddress={stakingContractAddress}
-            >
-              claim in {locktime / 3600 - getstakeInfoOfToken[1].toNumber()}{" "}
-              hours
+              {getstakeInfoOfToken[1].gt(0) && getstakeInfoOfToken[1].mul(3600).gte(BigNumber.from(locktime)) ? (
+                "Claim Rewards"
+              ) : (
+                `Claim in ${Math.max(0, locktime / 3600 - getstakeInfoOfToken[1].toNumber())} hours`
+              )}
             </Web3Button>
           )}
         </div>

@@ -201,13 +201,8 @@
   right: 20px;
   z-index: 1000;
 }
-.container {
-  /* ... */
-}
 
-.h1 {
-  /* ... */
-}
+
 
 /* ... (All other existing styles here) */
 
@@ -246,7 +241,5 @@
   .selectBoxTitle, .selectBoxDescription {
     font-size: 0.9rem;
   }
-  .connectWalletButton {
-    /* ...styles to adjust button */
-  }
+
 }
