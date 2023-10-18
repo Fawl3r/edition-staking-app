@@ -14,7 +14,7 @@ const Home: NextPage = () => {
       </div>
 
       {/* Top Section */}
-      <h1 className={styles.h1}>Gods Of Gaming - F3 Token Generator dApp</h1>
+      <h1 className={styles.h1}>Gods Of Gaming - F3 Dominion Token Generator dApp</h1>
       <div className={styles.nftBoxGrid}>
         <div
           className={styles.optionSelectBox}
