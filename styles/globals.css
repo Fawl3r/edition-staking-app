@@ -11,7 +11,7 @@
 body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
-  line-height: 1.5;
+  line-height: 10;
   padding-bottom: 250px;
 }
 
@@ -30,15 +30,44 @@ select {
   --tw-color1-hover: #9333ea;
 }
 
-body {
-  background: url("https://static.wixstatic.com/media/1808ae_5f0e68a0e30049a1ad033c8cd817d85f~mv2.png");
-  background-color: #191F4F; /* Change to any color you like */
-  background-size: cover;
-  font-family: "Inter", sans-serif;
-  color: var(--white);
-  display: flex;
+body, html {
   margin: 0;
-  text-align: center;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* Hide scrollbars */
+}
+
+.video-background {
+  position: fixed; /* Use fixed or absolute position */
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
+  width: auto; 
+  height: auto;
+  z-index: -100; /* Put the video under other elements */
+  background-size: cover;
+  overflow: hidden;
+}
+
+/* Optional: Style the content that overlays the video */
+.content {
+  position: relative;
+  z-index: 10;
+  /* Your styling for content */
+}
+
+@media (max-width: 767px) {
+  /* Adjust video sizing for smaller screens if necessary */
+  .video-background {
+    background: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+  }
 }
 
 h2 {

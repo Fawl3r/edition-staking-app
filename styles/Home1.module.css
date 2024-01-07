@@ -1,17 +1,25 @@
 .container {
-  background: url("");
-  background-size: cover;
-  
-  margin-top: 96px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  position: absolute;
+  position: relative; /* Changed from absolute to relative */
   padding: 0 24px;
-  
+  overflow: hidden; /* Ensure the video doesn't overflow the container */
 }
+
+.container video {
+  position: absolute; /* Position the video absolutely to cover the container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This will cover the area without distorting the aspect ratio */
+  z-index: -1; /* Position the video behind the content */
+}
+
 
 .h1 {
   margin-bottom: 0px;
